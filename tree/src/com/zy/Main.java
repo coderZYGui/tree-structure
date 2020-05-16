@@ -17,11 +17,18 @@ public class Main {
 //            bst.add(data[i]);
 //        }
 
-        BinarySearchTree<Person> bst2 = new BinarySearchTree<>(new PersonComparator1());
+        // 此时这里就没有使用自定义的比较器了,使用的是Person内部实现CompareTo的比较规则
+        BinarySearchTree<Person> bst2 = new BinarySearchTree<>();
         bst2.add(new Person(12));
         bst2.add(new Person(15));
 
-        BinarySearchTree<Person> bst3 = new BinarySearchTree<>(new PersonComparator2());
+        // 这里使用的是匿名内部类来实现接口,并重写接口的方法
+        BinarySearchTree<Person> bst3 = new BinarySearchTree<>(new Comparator<Person>() {
+            @Override
+            public int compare(Person e1, Person e2) {
+                return e2.getAge() - e1.getAge();
+            }
+        });
         bst3.add(new Person(12));
         bst3.add(new Person(15));
     }
@@ -35,12 +42,12 @@ public class Main {
         }
     }
 
-    // 创建第二种比较规则的比较器(年龄小的,属于大的元素)
-    private static class PersonComparator2 implements Comparator<Person> {
-
-        @Override
-        public int compare(Person e1, Person e2) {
-            return e2.getAge() - e1.getAge();
-        }
-    }
+//    // 创建第二种比较规则的比较器(年龄小的,属于大的元素)
+//    private static class PersonComparator2 implements Comparator<Person> {
+//
+//        @Override
+//        public int compare(Person e1, Person e2) {
+//            return e2.getAge() - e1.getAge();
+//        }
+//    }
 }

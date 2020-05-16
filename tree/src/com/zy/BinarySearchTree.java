@@ -6,7 +6,7 @@ package com.zy;
  * @author zygui
  * @date 2020/4/15 21:08
  */
-// 表示传进来的元素 E 必须要实现 Comparable接口中的方法; 这样以来,传入的元素必须要实现这个接口中的方法,逻辑都写到了元素中,不灵活!
+// 为了扩展,我们可以自己定义比较器,也不要抛弃Comparable的方式,使两者兼容,选择性更多
 public class BinarySearchTree<E> {
 
     private int size;
@@ -14,6 +14,10 @@ public class BinarySearchTree<E> {
     private Node<E> root;
 
     private Comparator<E> comparator; // 定义一个比较器
+
+    public BinarySearchTree() {
+        this(null);
+    }
 
     public BinarySearchTree(Comparator<E> comparator) {
         this.comparator = comparator;
@@ -83,7 +87,12 @@ public class BinarySearchTree<E> {
      * 小于0,代表e1<e2
      */
     private int compare(E e1, E e2) {
-        return comparator.compare(e1, e2);
+        if (comparator != null) { // 这里表示传入了比较器
+            // 优先使用比较器
+            return comparator.compare(e1, e2);
+        }
+        // 这里表示没有使用比较器,此时再强制将传入的元素实现Comparable接口,并重写接口中的方法
+        return ((Comparable<E>) e1).compareTo(e2);
     }
 
     /**
