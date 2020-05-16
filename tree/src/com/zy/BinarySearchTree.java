@@ -6,7 +6,8 @@ package com.zy;
  * @author zygui
  * @date 2020/4/15 21:08
  */
-public class BinarySearchTree<E> {
+// 表示传进来的元素 E 必须要实现 Comparable接口中的方法
+public class BinarySearchTree<E extends Comparable<E>> {
 
     private int size;
     // 定义根节点
@@ -76,7 +77,7 @@ public class BinarySearchTree<E> {
      * 小于0,代表e1<e2
      */
     private int compare(E e1, E e2) {
-        return 0;
+        return e1.compareTo(e2);
     }
 
     /**
