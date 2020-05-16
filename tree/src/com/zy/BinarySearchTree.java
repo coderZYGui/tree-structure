@@ -6,12 +6,18 @@ package com.zy;
  * @author zygui
  * @date 2020/4/15 21:08
  */
-// 表示传进来的元素 E 必须要实现 Comparable接口中的方法
-public class BinarySearchTree<E extends Comparable<E>> {
+// 表示传进来的元素 E 必须要实现 Comparable接口中的方法; 这样以来,传入的元素必须要实现这个接口中的方法,逻辑都写到了元素中,不灵活!
+public class BinarySearchTree<E> {
 
     private int size;
     // 定义根节点
     private Node<E> root;
+
+    private Comparator<E> comparator; // 定义一个比较器
+
+    public BinarySearchTree(Comparator<E> comparator) {
+        this.comparator = comparator;
+    }
 
     public int size() {
         return size;
@@ -77,7 +83,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
      * 小于0,代表e1<e2
      */
     private int compare(E e1, E e2) {
-        return e1.compareTo(e2);
+        return comparator.compare(e1, e2);
     }
 
     /**
