@@ -1,5 +1,7 @@
 package com.zy;
 
+import com.zy.printer.BinaryTreeInfo;
+
 /**
  * Description: 二叉排序树(二叉搜索树)实现
  *
@@ -7,7 +9,7 @@ package com.zy;
  * @date 2020/4/15 21:08
  */
 // 为了扩展,我们可以自己定义比较器,也不要抛弃Comparable的方式,使两者兼容,选择性更多
-public class BinarySearchTree<E> {
+public class BinarySearchTree<E> implements BinaryTreeInfo {
 
     private int size;
     // 定义根节点
@@ -92,19 +94,7 @@ public class BinarySearchTree<E> {
             return comparator.compare(e1, e2);
         }
         // 这里表示没有使用比较器,此时再强制将传入的元素实现Comparable接口,并重写接口中的方法
-        return ((Comparable<E>) e1).compareTo(e2);
-    }
-
-    /**
-     * 二叉排序树结点内容不能为空(否则怎么排序呢?)
-     *
-     * @param element 结点内容
-     */
-    private void elementNotNullCheck(E element) {
-        if (element == null) {
-            // 手动抛出异常对象
-            throw new IllegalArgumentException("element must not be null");
-        }
+        return ((java.lang.Comparable<E>) e1).compareTo(e2);
     }
 
     private static class Node<E> {
@@ -119,5 +109,37 @@ public class BinarySearchTree<E> {
             this.element = element;
             this.parent = parent;
         }
+    }
+
+    /**
+     * 二叉排序树结点内容不能为空(否则怎么排序呢?)
+     *
+     * @param element 结点内容
+     */
+    private void elementNotNullCheck(E element) {
+        if (element == null) {
+            // 手动抛出异常对象
+            throw new IllegalArgumentException("element must not be null");
+        }
+    }
+
+    @Override
+    public Object root() {
+        return root;
+    }
+
+    @Override
+    public Object left(Object node) {
+        return ((Node<E>)node).left;
+    }
+
+    @Override
+    public Object right(Object node) {
+        return ((Node<E>)node).right;
+    }
+
+    @Override
+    public Object string(Object node) {
+        return ((Node<E>)node).element;
     }
 }
