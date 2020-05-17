@@ -11,7 +11,35 @@ import com.zy.printer.BinaryTrees;
 public class Main {
     public static void main(String[] args) {
 
-        test2();
+        test3();
+    }
+
+    /**
+     * 遍历测试
+     */
+    public static void test3() {
+        Integer data[] = new Integer[]{
+                7, 4, 9, 2, 5, 8
+        };
+
+        BinarySearchTree<Integer> bst1 = new BinarySearchTree<>();
+        for (int i = 0; i < data.length; i++) {
+            bst1.add(data[i]);
+        }
+
+        BinaryTrees.println(bst1);
+
+        // 前序遍历
+        // bst1.preorderTraversal();
+
+        // 中序遍历
+        // bst1.inorderTraversal();
+
+        // 后序遍历
+        // bst1.postorderTraversal();
+
+        // 层序遍历
+        bst1.levelOrderTraversal();
     }
 
     /**

@@ -2,6 +2,9 @@ package com.zy;
 
 import com.zy.printer.BinaryTreeInfo;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * Description: 二叉排序树(二叉搜索树)实现
  *
@@ -62,6 +65,7 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
                 // 插入的元素小于根节点的元素,插入到根节点的左边
                 node = node.left;
             } else { // 相等
+                node.element = element;
                 return;
             }
         }
@@ -81,6 +85,69 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
 
     public boolean contains(E element) {
         return false;
+    }
+
+    /**
+     * 前序遍历(根左右)
+     */
+    public void preorderTraversal() {
+        this.preorderTraversal(root); // 从根节点开始遍历
+    }
+
+    private void preorderTraversal(Node<E> node) {
+        if (node == null) return;
+        System.out.print(node.element + " ");
+        preorderTraversal(node.left);
+        preorderTraversal(node.right);
+    }
+
+    /**
+     * 中序遍历(左根右 / 右根左), 相当于升序/降序
+     */
+    public void inorderTraversal() {
+        this.inorderTraversal(root); // 从根节点开始遍历
+    }
+
+    private void inorderTraversal(Node<E> node) {
+        if (node == null) return;
+        inorderTraversal(node.left);
+        System.out.print(node.element + " ");
+        inorderTraversal(node.right);
+    }
+
+    /**
+     * 后序遍历(左右根/右左根)
+     */
+    public void postorderTraversal() {
+        this.postorderTraversal(root); // 从根节点开始遍历
+    }
+
+    private void postorderTraversal(Node<E> node) {
+        if (node == null) return;
+        postorderTraversal(node.left);
+        postorderTraversal(node.right);
+        System.out.print(node.element + " ");
+    }
+
+    /**
+     * 层序遍历
+     */
+    public void levelOrderTraversal() {
+        if (root == null) return;
+
+        Queue<Node<E>> queue = new LinkedList<>();
+        queue.offer(root); // 将根节点先入队
+
+        while (!queue.isEmpty()) {
+            Node<E> node = queue.poll(); // 取出队头节点
+            System.out.print(node.element + " ");
+            if (node.left != null) {    // 如果该节点左节点不为空,则将该左节点入队
+                queue.offer(node.left);
+            }
+            if (node.right != null) {   // 如果该节点右节点不为空,则将该右节点入队
+                queue.offer(node.right);
+            }
+        }
     }
 
     /**
@@ -140,6 +207,11 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
 
     @Override
     public Object string(Object node) {
-        return ((Node<E>)node).element;
+        Node<E> myNode = (Node<E>)node;
+        String parentString = "null";
+        if (myNode.parent != null) {
+            parentString = myNode.parent.element.toString();
+        }
+        return myNode.element + "_p(" + parentString + ")";
     }
 }
