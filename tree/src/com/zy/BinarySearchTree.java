@@ -87,60 +87,129 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
         return false;
     }
 
+    // ==================================默认遍历的方式=======================================
+//    /**
+//     * 前序遍历(根左右)
+//     */
+//    public void preorderTraversal() {
+//        this.preorderTraversal(root); // 从根节点开始遍历
+//    }
+//
+//    private void preorderTraversal(Node<E> node) {
+//        if (node == null) return;
+//        System.out.print(node.element + " ");
+//        preorderTraversal(node.left);
+//        preorderTraversal(node.right);
+//    }
+//
+//    /**
+//     * 中序遍历(左根右 / 右根左), 相当于升序/降序
+//     */
+//    public void inorderTraversal() {
+//        this.inorderTraversal(root); // 从根节点开始遍历
+//    }
+//
+//    private void inorderTraversal(Node<E> node) {
+//        if (node == null) return;
+//        inorderTraversal(node.left);
+//        System.out.print(node.element + " ");
+//        inorderTraversal(node.right);
+//    }
+//
+//    /**
+//     * 后序遍历(左右根/右左根)
+//     */
+//    public void postorderTraversal() {
+//        this.postorderTraversal(root); // 从根节点开始遍历
+//    }
+//
+//    private void postorderTraversal(Node<E> node) {
+//        if (node == null) return;
+//        postorderTraversal(node.left);
+//        postorderTraversal(node.right);
+//        System.out.print(node.element + " ");
+//    }
+//
+//    /**
+//     * 层序遍历
+//     */
+//    public void levelOrderTraversal() {
+//        if (root == null) return;
+//
+//        Queue<Node<E>> queue = new LinkedList<>();
+//        queue.offer(root); // 将根节点先入队
+//
+//        while (!queue.isEmpty()) {
+//            Node<E> node = queue.poll(); // 取出队头节点
+//            System.out.print(node.element + " ");
+//            if (node.left != null) {    // 如果该节点左节点不为空,则将该左节点入队
+//                queue.offer(node.left);
+//            }
+//            if (node.right != null) {   // 如果该节点右节点不为空,则将该右节点入队
+//                queue.offer(node.right);
+//            }
+//        }
+//    }
+
+    // ==================================外界自定义遍历的方式=======================================
+
     /**
      * 前序遍历(根左右)
      */
-    public void preorderTraversal() {
-        this.preorderTraversal(root); // 从根节点开始遍历
+    public void preorderTraversal(Visitor<E> visitor) {
+        this.preorderTraversal(root, visitor); // 从根节点开始遍历
     }
 
-    private void preorderTraversal(Node<E> node) {
-        if (node == null) return;
-        System.out.print(node.element + " ");
-        preorderTraversal(node.left);
-        preorderTraversal(node.right);
+    private void preorderTraversal(Node<E> node, Visitor<E> visitor) {
+        if (node == null || visitor == null) return;
+
+        visitor.visit(node.element);
+        preorderTraversal(node.left, visitor);
+        preorderTraversal(node.right, visitor);
     }
 
     /**
      * 中序遍历(左根右 / 右根左), 相当于升序/降序
      */
-    public void inorderTraversal() {
-        this.inorderTraversal(root); // 从根节点开始遍历
+    public void inorderTraversal(Visitor<E> visitor) {
+        this.inorderTraversal(root, visitor); // 从根节点开始遍历
     }
 
-    private void inorderTraversal(Node<E> node) {
-        if (node == null) return;
-        inorderTraversal(node.left);
-        System.out.print(node.element + " ");
-        inorderTraversal(node.right);
+    private void inorderTraversal(Node<E> node, Visitor<E> visitor) {
+        if (node == null || visitor == null) return;
+
+        inorderTraversal(node.left, visitor);
+        visitor.visit(node.element);
+        inorderTraversal(node.right, visitor);
     }
 
     /**
      * 后序遍历(左右根/右左根)
      */
-    public void postorderTraversal() {
-        this.postorderTraversal(root); // 从根节点开始遍历
+    public void postorderTraversal(Visitor<E> visitor) {
+        this.postorderTraversal(root, visitor); // 从根节点开始遍历
     }
 
-    private void postorderTraversal(Node<E> node) {
-        if (node == null) return;
-        postorderTraversal(node.left);
-        postorderTraversal(node.right);
-        System.out.print(node.element + " ");
+    private void postorderTraversal(Node<E> node, Visitor<E> visitor) {
+        if (node == null || visitor == null) return;
+
+        postorderTraversal(node.left, visitor);
+        postorderTraversal(node.right, visitor);
+        visitor.visit(node.element);
     }
 
-    /**
-     * 层序遍历
-     */
-    public void levelOrderTraversal() {
-        if (root == null) return;
+    // 层序遍历
+    public void levelOrder(Visitor<E> visitor) {
+        if (root == null || visitor == null) return;
 
         Queue<Node<E>> queue = new LinkedList<>();
         queue.offer(root); // 将根节点先入队
 
         while (!queue.isEmpty()) {
             Node<E> node = queue.poll(); // 取出队头节点
-            System.out.print(node.element + " ");
+
+            visitor.visit(node.element);
+
             if (node.left != null) {    // 如果该节点左节点不为空,则将该左节点入队
                 queue.offer(node.left);
             }
@@ -148,6 +217,9 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
                 queue.offer(node.right);
             }
         }
+    }
+    public interface Visitor<E> {
+        void visit(E element);
     }
 
     /**

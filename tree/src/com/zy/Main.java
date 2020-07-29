@@ -39,7 +39,22 @@ public class Main {
         // bst1.postorderTraversal();
 
         // 层序遍历
-        bst1.levelOrderTraversal();
+        // bst1.levelOrderTraversal();
+
+        // 层序遍历
+//         bst1.levelOrder(new BinarySearchTree.Visitor<Integer>() {
+//             @Override
+//             public void visit(Integer element) {
+//                 System.out.print("_" + element + "_");
+//             }
+//         });
+
+        bst1.inorderTraversal(new BinarySearchTree.Visitor<Integer>() {
+            @Override
+            public void visit(Integer element) {
+                System.out.print("_" + element + "_");
+            }
+        });
     }
 
     /**
