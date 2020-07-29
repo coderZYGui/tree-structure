@@ -27,7 +27,10 @@ public class Main {
             bst1.add(data[i]);
         }
 
-        // BinaryTrees.println(bst1);
+        // MJ的二叉树排序树打印工具
+         BinaryTrees.println(bst1);
+
+        // --------------------------------------------
 
         // 前序遍历
         // bst1.preorderTraversal();
@@ -41,6 +44,9 @@ public class Main {
         // 层序遍历
         // bst1.levelOrderTraversal();
 
+        // --------------------------------------------
+
+        // 使用的是外界调用遍历的接口, 获取到元素后, 可以对元素进行自定义操作
         // 层序遍历
 //         bst1.levelOrder(new BinarySearchTree.Visitor<Integer>() {
 //             @Override
@@ -57,8 +63,16 @@ public class Main {
 //            }
 //        });
 
+        // --------------------------------------------
+
         // 使用我们自定义的打印器(打印的是 前序遍历 结果)
-        System.out.println(bst1);
+        // System.out.println(bst1);
+
+        // --------------------------------------------
+
+        // 测试计算二叉树高度
+        // System.out.println(bst1.height()); // 递归的方式
+        // System.out.println(bst1.height2()); // 使用迭代的方式
     }
 
     /**

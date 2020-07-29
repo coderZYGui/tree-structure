@@ -218,6 +218,7 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
             }
         }
     }
+
     public interface Visitor<E> {
         void visit(E element);
     }
@@ -230,10 +231,57 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
     }
 
     private void toString(Node<E> node, StringBuilder sb, String prefix) {
-        if (node == null) return;;
+        if (node == null) return;
+        ;
         sb.append(prefix).append(node.element).append("\n");
         toString(node.left, sb, prefix + "L--");
         toString(node.right, sb, prefix + "R--");
+    }
+
+    // 计算二叉树排序树的高度
+
+    // 方式一: 递归的方式
+    public int height() {
+        return height(root);
+    }
+
+    public int height(Node<E> node) {
+        if (node == null) return 0;
+        // 左子节点或右子节点中高度最高的值 + 1
+        return 1 + Math.max(height(node.left), height(node.right));
+    }
+
+    // 方式二: 迭代的方式
+    /**
+     * 使用层序遍历的方式, 计算树的高度
+     */
+    public int height2() {
+        Queue<Node<E>> queue = new LinkedList<>();
+        queue.offer(root);
+        // 当前队列中节点个数
+        int elementCount = 1;
+        // 树的高度
+        int height = 0;
+        while (!queue.isEmpty()) {
+            // 取出节点
+            Node<E> node = queue.poll();
+            // 队列中节点个数-1
+            elementCount--;
+            if (node.left != null) {
+                queue.offer(node.left);
+            }
+            if (node.right != null) {
+                queue.offer(node.right);
+            }
+            // 当 elementCount = 0, 说明当前层的节点遍历完成
+            if (elementCount == 0) {
+                // 记录下一层节点个数
+                elementCount = queue.size();
+                // 高度+1
+                height++;
+            }
+        }
+        return height;
     }
 
     /**
@@ -283,17 +331,17 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
 
     @Override
     public Object left(Object node) {
-        return ((Node<E>)node).left;
+        return ((Node<E>) node).left;
     }
 
     @Override
     public Object right(Object node) {
-        return ((Node<E>)node).right;
+        return ((Node<E>) node).right;
     }
 
     @Override
     public Object string(Object node) {
-        Node<E> myNode = (Node<E>)node;
+        Node<E> myNode = (Node<E>) node;
         String parentString = "null";
         if (myNode.parent != null) {
             parentString = myNode.parent.element.toString();
