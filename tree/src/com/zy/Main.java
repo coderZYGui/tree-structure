@@ -27,7 +27,7 @@ public class Main {
             bst1.add(data[i]);
         }
 
-        BinaryTrees.println(bst1);
+        // BinaryTrees.println(bst1);
 
         // 前序遍历
         // bst1.preorderTraversal();
@@ -49,12 +49,16 @@ public class Main {
 //             }
 //         });
 
-        bst1.inorderTraversal(new BinarySearchTree.Visitor<Integer>() {
-            @Override
-            public void visit(Integer element) {
-                System.out.print("_" + element + "_");
-            }
-        });
+        // 中序遍历
+//        bst1.inorderTraversal(new BinarySearchTree.Visitor<Integer>() {
+//            @Override
+//            public void visit(Integer element) {
+//                System.out.print("_" + element + "_");
+//            }
+//        });
+
+        // 使用我们自定义的打印器(打印的是 前序遍历 结果)
+        System.out.println(bst1);
     }
 
     /**

@@ -222,6 +222,20 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
         void visit(E element);
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        this.toString(root, sb, ""); // 如果是根节点什么都不加
+        return sb.toString();
+    }
+
+    private void toString(Node<E> node, StringBuilder sb, String prefix) {
+        if (node == null) return;;
+        sb.append(prefix).append(node.element).append("\n");
+        toString(node.left, sb, prefix + "L--");
+        toString(node.right, sb, prefix + "R--");
+    }
+
     /**
      * @return 返回值等于0, 代表e1=e2
      * 大于0,代表e1>e2
