@@ -238,6 +238,66 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
         toString(node.right, sb, prefix + "R--");
     }
 
+    public boolean isCompleteTree2() {
+        if (root == null) return false;
+
+        Queue<Node<E>> queue = new LinkedList<>();
+        queue.offer(root); // 将根节点先入队
+
+        boolean leaf = false;
+        while (!queue.isEmpty()) {
+            Node<E> node = queue.poll(); // 取出队头节点
+
+            if (leaf && !node.isLeaf()) return false;
+
+            if (node.left != null) {    // 如果该节点左节点不为空,则将该左节点入队
+                queue.offer(node.left);
+            } else if (node.right != null) {
+                // node.left == null && node.right != null
+                return false;
+            }
+
+            if (node.right != null) {   // 如果该节点右节点不为空,则将该右节点入队
+                queue.offer(node.right);
+            } else {
+                // 能来到这里, 说明后面的节点都是叶子节点
+                // node.left == null && node.right == null
+                // node.left != null && node.right == null
+                leaf = true;
+            }
+        }
+        return true;
+    }
+
+    // 判断一棵二叉树是否为完全二叉树(方式一, 推荐方式二)
+    public boolean isCompleteTree() {
+        if (root == null) return false;
+
+        Queue<Node<E>> queue = new LinkedList<>();
+        queue.offer(root); // 将根节点先入队
+
+        boolean leaf = false;
+        while (!queue.isEmpty()) {
+            Node<E> node = queue.poll(); // 取出队头节点
+
+            // node不是叶子节点的情况
+            if (leaf && !node.isLeaf()) return false;
+
+            if (node.hasTwoChildren()) {    // 左右节点都不为空
+                queue.offer(node.left);
+                queue.offer(node.right);
+            } else if (node.left == null && node.right != null) {   // 不符合完全二叉树的要求
+                return false;
+            } else {    // 这里的节点都是叶子节点
+                leaf = true;
+                if (node.left != null) {
+                    queue.offer(node.left);
+                }
+            }
+        }
+        return true;
+    }
+
     // 计算二叉树排序树的高度
 
     // 方式一: 递归的方式
@@ -309,6 +369,22 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
         public Node(E element, Node<E> parent) {
             this.element = element;
             this.parent = parent;
+        }
+
+        /**
+         * 判断是否为叶子节点
+         * @return
+         */
+        public boolean isLeaf() {
+            return left == null && right == null;
+        }
+
+        /**
+         * 判断是否为左右节点都不为空的节点
+         * @return
+         */
+        public boolean hasTwoChildren() {
+            return left != null && right != null;
         }
     }
 

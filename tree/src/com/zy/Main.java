@@ -11,11 +11,52 @@ import com.zy.printer.BinaryTrees;
 public class Main {
     public static void main(String[] args) {
 
-        test3();
+        test5();
     }
 
     /**
-     * 遍历测试
+     * 测试用例5: 判断二叉树是否是完全二叉树
+     */
+    public static void test5() {
+        Integer data[] = new Integer[]{
+                7, 4, 9, 2, 5
+        };
+
+        BinarySearchTree<Integer> bst1 = new BinarySearchTree<>();
+        for (int i = 0; i < data.length; i++) {
+            bst1.add(data[i]);
+        }
+
+        // MJ的二叉树排序树打印工具
+        BinaryTrees.println(bst1);
+
+        System.out.println(bst1.isCompleteTree2()); // 推荐使用这种方式, 更清晰
+        System.out.println(bst1.isCompleteTree());
+    }
+
+    /**
+     * 测试用例4: 计算二叉树的高度
+     */
+    public static void test4() {
+        Integer data[] = new Integer[]{
+                7, 4, 9, 2, 5, 8
+        };
+
+        BinarySearchTree<Integer> bst1 = new BinarySearchTree<>();
+        for (int i = 0; i < data.length; i++) {
+            bst1.add(data[i]);
+        }
+
+        // MJ的二叉树排序树打印工具
+        BinaryTrees.println(bst1);
+
+        // 测试计算二叉树高度
+         System.out.println(bst1.height()); // 递归的方式
+//         System.out.println(bst1.height2()); // 使用迭代的方式
+    }
+
+    /**
+     * 测试用例3: 遍历测试
      */
     public static void test3() {
         Integer data[] = new Integer[]{
@@ -28,7 +69,7 @@ public class Main {
         }
 
         // MJ的二叉树排序树打印工具
-         BinaryTrees.println(bst1);
+        BinaryTrees.println(bst1);
 
         // --------------------------------------------
 
@@ -69,10 +110,6 @@ public class Main {
         // System.out.println(bst1);
 
         // --------------------------------------------
-
-        // 测试计算二叉树高度
-        // System.out.println(bst1.height()); // 递归的方式
-        // System.out.println(bst1.height2()); // 使用迭代的方式
     }
 
     /**
