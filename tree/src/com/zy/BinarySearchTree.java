@@ -8,7 +8,7 @@ import java.util.Queue;
 /**
  * Description: 二叉排序树(二叉搜索树)实现
  *
- * @author zygui
+ * @author guizy1
  * @date 2020/4/15 21:08
  */
 // 为了扩展,我们可以自己定义比较器,也不要抛弃Comparable的方式,使两者兼容,选择性更多
