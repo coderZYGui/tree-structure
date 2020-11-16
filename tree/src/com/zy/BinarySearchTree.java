@@ -37,7 +37,8 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
     }
 
     public void clear() {
-
+        root = null;
+        size = 0;
     }
 
     public void add(E element) {
@@ -151,7 +152,7 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
     }
 
     public boolean contains(E element) {
-        return false;
+        return node(element) != null;
     }
 
     // ==================================默认遍历的方式=======================================
