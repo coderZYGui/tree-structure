@@ -8,7 +8,7 @@ import java.util.Queue;
 /**
  * Description: 二叉排序树(二叉搜索树)实现
  *
- * @author guizy1
+ * @author guizy
  * @date 2020/4/15 21:08
  */
 // 为了扩展,我们可以自己定义比较器,也不要抛弃Comparable的方式,使两者兼容,选择性更多
@@ -88,68 +88,69 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
     }
 
     // ==================================默认遍历的方式=======================================
-//    /**
-//     * 前序遍历(根左右)
-//     */
-//    public void preorderTraversal() {
-//        this.preorderTraversal(root); // 从根节点开始遍历
-//    }
-//
-//    private void preorderTraversal(Node<E> node) {
-//        if (node == null) return;
-//        System.out.print(node.element + " ");
-//        preorderTraversal(node.left);
-//        preorderTraversal(node.right);
-//    }
-//
-//    /**
-//     * 中序遍历(左根右 / 右根左), 相当于升序/降序
-//     */
-//    public void inorderTraversal() {
-//        this.inorderTraversal(root); // 从根节点开始遍历
-//    }
-//
-//    private void inorderTraversal(Node<E> node) {
-//        if (node == null) return;
-//        inorderTraversal(node.left);
-//        System.out.print(node.element + " ");
-//        inorderTraversal(node.right);
-//    }
-//
-//    /**
-//     * 后序遍历(左右根/右左根)
-//     */
-//    public void postorderTraversal() {
-//        this.postorderTraversal(root); // 从根节点开始遍历
-//    }
-//
-//    private void postorderTraversal(Node<E> node) {
-//        if (node == null) return;
-//        postorderTraversal(node.left);
-//        postorderTraversal(node.right);
-//        System.out.print(node.element + " ");
-//    }
-//
-//    /**
-//     * 层序遍历
-//     */
-//    public void levelOrderTraversal() {
-//        if (root == null) return;
-//
-//        Queue<Node<E>> queue = new LinkedList<>();
-//        queue.offer(root); // 将根节点先入队
-//
-//        while (!queue.isEmpty()) {
-//            Node<E> node = queue.poll(); // 取出队头节点
-//            System.out.print(node.element + " ");
-//            if (node.left != null) {    // 如果该节点左节点不为空,则将该左节点入队
-//                queue.offer(node.left);
-//            }
-//            if (node.right != null) {   // 如果该节点右节点不为空,则将该右节点入队
-//                queue.offer(node.right);
-//            }
-//        }
-//    }
+
+    /**
+     * 前序遍历(根左右)
+     */
+    public void preorderTraversal() {
+        this.preorderTraversal(root); // 从根节点开始遍历
+    }
+
+    private void preorderTraversal(Node<E> node) {
+        if (node == null) return;
+        System.out.print(node.element + " ");
+        preorderTraversal(node.left);
+        preorderTraversal(node.right);
+    }
+
+    /**
+     * 中序遍历(左根右 / 右根左), 相当于升序/降序
+     */
+    public void inorderTraversal() {
+        this.inorderTraversal(root); // 从根节点开始遍历
+    }
+
+    private void inorderTraversal(Node<E> node) {
+        if (node == null) return;
+        inorderTraversal(node.left);
+        System.out.print(node.element + " ");
+        inorderTraversal(node.right);
+    }
+
+    /**
+     * 后序遍历(左右根/右左根)
+     */
+    public void postorderTraversal() {
+        this.postorderTraversal(root); // 从根节点开始遍历
+    }
+
+    private void postorderTraversal(Node<E> node) {
+        if (node == null) return;
+        postorderTraversal(node.left);
+        postorderTraversal(node.right);
+        System.out.print(node.element + " ");
+    }
+
+    /**
+     * 层序遍历
+     */
+    public void levelOrderTraversal() {
+        if (root == null) return;
+
+        Queue<Node<E>> queue = new LinkedList<>();
+        queue.offer(root); // 将根节点先入队
+
+        while (!queue.isEmpty()) {
+            Node<E> node = queue.poll(); // 取出队头节点
+            System.out.print(node.element + " ");
+            if (node.left != null) {    // 如果该节点左节点不为空,则将该左节点入队
+                queue.offer(node.left);
+            }
+            if (node.right != null) {   // 如果该节点右节点不为空,则将该右节点入队
+                queue.offer(node.right);
+            }
+        }
+    }
 
     // ==================================外界自定义遍历的方式=======================================
 
@@ -217,6 +218,65 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
                 queue.offer(node.right);
             }
         }
+    }
+
+    /**
+     * 根据传入的节点, 返回该节点的前驱节点 (中序遍历)
+     *
+     * @param node
+     * @return
+     */
+    private Node<E> predecessor(Node<E> node) {
+        if (node == null) return node;
+
+        // (中序遍历)前驱节点在左子树当中(node.left.right.right.right...)
+        Node<E> p = node.left;
+        // 左子树存在
+        if (p != null) {
+            while (p.right != null) {
+                p = p.right;
+            }
+            return p;
+        }
+
+        // 程序走到这里说明左子树不存在; 从父节点、祖父节点中寻找前驱节点
+        /*
+         * node的父节点不为空 && node是其父节点的左子树时. 就一直往上寻找它的父节点
+         *  因为node==node.parent.right, 说明你在你父节点的右边, 那么node.parent就是其node的前驱节点
+         */
+        while (node.parent != null && node == node.parent.left) {
+            node = node.parent;
+        }
+
+        // 能来到这里表示: 两种情况如下
+        // node.parent == null 表示没有父节点(根节点),返回空 ==> return node.parent;
+        // node==node.parent.right 说明你在你父节点的右边, 那么node.parent就是其node的前驱节点 ==> return node.parent;
+        return node.parent;
+    }
+
+    /**
+     * 根据传入的节点, 返回该节点的后驱节点 (中序遍历)
+     *
+     * @param node
+     * @return
+     */
+    private Node<E> successor(Node<E> node) {
+        if (node == null) return node;
+
+        Node<E> p = node.right;
+        if (p != null) {
+            while (p.left != null) {
+                p = p.left;
+            }
+            return p;
+        }
+
+        // node.right为空
+        while (node.parent != null && node == node.parent.right) {
+            node = node.parent;
+        }
+
+        return node.parent;
     }
 
     public interface Visitor<E> {
@@ -312,6 +372,7 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
     }
 
     // 方式二: 迭代的方式
+
     /**
      * 使用层序遍历的方式, 计算树的高度
      */
@@ -373,6 +434,7 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
 
         /**
          * 判断是否为叶子节点
+         *
          * @return
          */
         public boolean isLeaf() {
@@ -381,6 +443,7 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
 
         /**
          * 判断是否为左右节点都不为空的节点
+         *
          * @return
          */
         public boolean hasTwoChildren() {
@@ -418,10 +481,11 @@ public class BinarySearchTree<E> implements BinaryTreeInfo {
     @Override
     public Object string(Object node) {
         Node<E> myNode = (Node<E>) node;
-        String parentString = "null";
-        if (myNode.parent != null) {
-            parentString = myNode.parent.element.toString();
-        }
-        return myNode.element + "_p(" + parentString + ")";
+//        String parentString = "null";
+//        if (myNode.parent != null) {
+//            parentString = myNode.parent.element.toString();
+//        }
+//        return myNode.element + "_p(" + parentString + ")";
+        return myNode.element;
     }
 }
