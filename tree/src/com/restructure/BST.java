@@ -1,5 +1,7 @@
 package com.restructure;
 
+import com.restructure.Interface.Comparator;
+
 /**
  * Description: 重构二叉排序树
  *
@@ -76,12 +78,19 @@ public class BST<E> extends BinaryTree<E> {
         size--;
         // 删除node是度为2的结点
         if (node.hasTwoChildren()) {
-            //1 找到后继(也可以找到前驱)
+            /*//1 找到后继(也可以找到前驱)
             Node<E> successor = successor(node);
             //2 用后继结点的值覆盖度为2结点的值
             node.element = successor.element;
             //3 删除后继节点
-            node = successor;
+            node = successor;*/
+
+            //1、找到前驱
+            Node<E> predecessor = predecessor(node);
+            //2、用前驱节点的值覆盖度为2节点的值
+            node.element = predecessor.element;
+            //3、删除前驱节点
+            node = predecessor;
         }
         // 删除node,即删除后继节点 (node节点必然是度为1或0)
         // 因为node只有一个子节点/0个子节点, 如果其left!=null, 则用node.left来替代, node.left==null, 用node.right来替代,

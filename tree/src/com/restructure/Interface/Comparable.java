@@ -1,4 +1,4 @@
-package com.restructure;
+package com.restructure.Interface;
 
 /**
  * Description: 比较的接口
