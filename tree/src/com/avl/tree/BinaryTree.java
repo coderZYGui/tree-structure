@@ -239,6 +239,24 @@ public class BinaryTree<E> implements BinaryTreeInfo {
         public boolean hasTwoChildren() {
             return left != null && right != null;
         }
+
+        /**
+         * 判断自己是否左子树
+         *
+         * @return
+         */
+        public boolean isLeftChild() {
+            return parent != null && this == parent.left;
+        }
+
+        /**
+         * 判断自己是否左子树
+         *
+         * @return
+         */
+        public boolean isRightChild() {
+            return parent != null && this == parent.right;
+        }
     }
 
     @Override
