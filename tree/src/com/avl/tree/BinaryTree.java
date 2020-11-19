@@ -1,12 +1,13 @@
-package com.restructure;
+package com.avl.tree;
 
-import com.restructure.printer.BinaryTreeInfo;
+import com.avl.printer.BinaryTreeInfo;
+import com.restructure.BST;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * Description: 二叉树
+ * Description: 普通二叉树
  *
  * @author guizy
  * @date 2020/11/16 22:34
@@ -112,38 +113,9 @@ public class BinaryTree<E> implements BinaryTreeInfo {
         return 1 + Math.max(height(node.left), height(node.right));
     }
 
-    // 方式二: 迭代的方式
-    /**
-     * 使用层序遍历的方式, 计算树的高度
-     */
-    /*public int height2() {
-        Queue<Node<E>> queue = new LinkedList<>();
-        queue.offer(root);
-        // 当前队列中节点个数
-        int elementCount = 1;
-        // 树的高度
-        int height = 0;
-        while (!queue.isEmpty()) {
-            // 取出节点
-            Node<E> node = queue.poll();
-            // 队列中节点个数-1
-            elementCount--;
-            if (node.left != null) {
-                queue.offer(node.left);
-            }
-            if (node.right != null) {
-                queue.offer(node.right);
-            }
-            // 当 elementCount = 0, 说明当前层的节点遍历完成
-            if (elementCount == 0) {
-                // 记录下一层节点个数
-                elementCount = queue.size();
-                // 高度+1
-                height++;
-            }
-        }
-        return height;
-    }*/
+    protected Node<E> createNode(E element, Node<E> parent) {
+        return new Node<>(element, parent);
+    }
 
     // 判断一棵二叉树是否为完全二叉树(推荐方式二)
     // 方式二
@@ -177,35 +149,6 @@ public class BinaryTree<E> implements BinaryTreeInfo {
         }
         return true;
     }
-
-    // 方式一
-    /*public boolean isCompleteTree2() {
-        if (root == null) return false;
-
-        Queue<Node<E>> queue = new LinkedList<>();
-        queue.offer(root); // 将根节点先入队
-
-        boolean leaf = false;
-        while (!queue.isEmpty()) {
-            Node<E> node = queue.poll(); // 取出队头节点
-
-            // node不是叶子节点的情况
-            if (leaf && !node.isLeaf()) return false;
-
-            if (node.hasTwoChildren()) {    // 左右节点都不为空
-                queue.offer(node.left);
-                queue.offer(node.right);
-            } else if (node.left == null && node.right != null) {   // 不符合完全二叉树的要求
-                return false;
-            } else {    // 这里的节点都是叶子节点
-                leaf = true;
-                if (node.left != null) {
-                    queue.offer(node.left);
-                }
-            }
-        }
-        return true;
-    }*/
 
     /**
      * 根据传入的节点, 返回该节点的前驱节点 (中序遍历)

@@ -1,4 +1,4 @@
-package com.restructure.Interface;
+package com.avl.Interface;
 
 /**
  * Description: 比较器

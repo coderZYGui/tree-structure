@@ -1,4 +1,4 @@
-package com.restructure.printer;
+package com.avl.printer;
 
 public class Strings {
 	public static String repeat(String string, int count) {

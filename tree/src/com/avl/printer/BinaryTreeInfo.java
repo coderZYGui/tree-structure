@@ -1,4 +1,4 @@
-package com.restructure.printer;
+package com.avl.printer;
 
 public interface BinaryTreeInfo {
 	/**

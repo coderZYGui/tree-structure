@@ -1,9 +1,9 @@
-package com.restructure;
+package com.avl.tree;
 
-import com.restructure.Interface.Comparator;
+import com.avl.Interface.Comparator;
 
 /**
- * Description: 重构二叉排序树
+ * Description: 二叉搜索树
  *
  * @author guizy
  * @date 2020/4/15 21:08
@@ -26,8 +26,11 @@ public class BST<E> extends BinaryTree<E> {
         // 添加第一个节点
         if (root == null) {
             // 给根节点赋值,且根节点没有父节点
-            root = new Node<>(element, null);
+            root = createNode(element, null);
             size++;
+
+            // 添加节点之后的处理
+            afterAdd(root);
             return;
         }
 
@@ -50,13 +53,23 @@ public class BST<E> extends BinaryTree<E> {
             }
         }
         // 看看插入到父节点的哪个位置
-        Node<E> newNode = new Node<>(element, parent);
+        Node<E> newNode = createNode(element, parent);
         if (cmp > 0) {
             parent.right = newNode;
         } else {
             parent.left = newNode;
         }
         size++;
+
+        // 添加节点之后的逻辑
+        afterAdd(newNode);
+    }
+
+    /**
+     * 模板方法
+     * @param node
+     */
+    protected void afterAdd(Node<E> node) {
     }
 
     public void remove(E element) {
