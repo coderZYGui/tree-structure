@@ -16,17 +16,28 @@ public class Main {
 
     public static void test() {
         Integer[] data = new Integer[]{
-                85, 19, 69, 3, 7, 99, 95, 2, 1, 70, 44, 58, 11, 21, 14, 93, 57, 4, 56
+                40, 35, 12, 54, 3, 29, 98, 100, 2, 76
         };
 
         AVLTree<Integer> avl = new AVLTree<>();
         for (int i = 0; i < data.length; i++) {
             avl.add(data[i]);
-            System.out.println("[" + data[i] + "]");
-            BinaryTrees.println(avl);
-            System.out.println("-----------------------------------------------------------------------------------------------------------------------------");
+            // System.out.println("[" + data[i] + "]");
+            // BinaryTrees.println(avl);
+            // System.out.println("-----------------------------------------------------------------------------------------------------------------------------");
         }
 
+        for (int i = 0; i < data.length; i++) {
+            avl.remove(data[i]);
+             System.out.println("[" + data[i] + "]");
+             BinaryTrees.println(avl);
+             System.out.println("-----------------------------------------------------------------------------------------------------------------------------");
+        }
+
+
+        // avl.remove(99);
+        // avl.remove(85);
+        // avl.remove(95);
         // BinaryTrees.println(avl);
     }
 }

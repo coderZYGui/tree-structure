@@ -66,10 +66,19 @@ public class BST<E> extends BinaryTree<E> {
     }
 
     /**
-     * 模板方法
-     * @param node
+     * 添加node之后的调整
+     *
+     * @param node 新添加的结点
      */
     protected void afterAdd(Node<E> node) {
+    }
+
+    /**
+     * 删除node之后的调整
+     *
+     * @param node 被删除的结点
+     */
+    protected void afterRemove(Node<E> node) {
     }
 
     public void remove(E element) {
@@ -122,15 +131,21 @@ public class BST<E> extends BinaryTree<E> {
             } else if (node == node.parent.right) {
                 node.parent.right = replacement;
             }
+            // 删除结点之后的处理
+            afterRemove(node);
             // 删除node是叶子节点, 且是根节点
         } else if (node.parent == null) {
             root = null;
+            // 删除结点之后的处理
+            afterRemove(node);
         } else { // node是叶子结点, 且不是根节点
             if (node == node.parent.left) {
                 node.parent.left = null;
             } else {  // node == node.parent.right
                 node.parent.right = null;
             }
+            // 删除结点之后的处理
+            afterRemove(node);
         }
     }
 

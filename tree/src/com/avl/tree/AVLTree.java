@@ -53,6 +53,23 @@ public class AVLTree<E> extends BST<E> {
         }
     }
 
+    /**
+     * @param node 被删除的结点
+     */
+    @Override
+    protected void afterRemove(Node<E> node) {
+        while ((node = node.parent) != null) {
+            // 判断node是否平衡
+            if (isBalanced(node)) {
+                // 更新高度
+                updateHeight(node);
+            } else {
+                // 恢复平衡
+                rebalance(node);
+            }
+        }
+    }
+
     @Override
     protected Node<E> createNode(E element, Node<E> parent) {
         return new AVLNode<>(element, parent);
