@@ -8,6 +8,7 @@ import com.avl.Interface.Comparator;
  * @author guizy
  * @date 2020/11/18 23:31
  */
+@SuppressWarnings("all")
 public class AVLTree<E> extends BST<E> {
 
     /**
@@ -37,7 +38,10 @@ public class AVLTree<E> extends BST<E> {
         while ((node = node.parent) != null) {
             // 判断node是否平衡
             if (isBalanced(node)) {
-                // 更新高度
+                /*
+                    因为即使添加完一个结点, 整棵树也是平衡的, 但是node的父节点高度
+                    也发生了变化, 所以我们要更新它们的高度; 新添加的结点默认高度为1(height默认)了
+                */
                 updateHeight(node);
             } else {
                 // 能到这里说明, node肯定不平衡, 且node是高度最小的节点
@@ -81,18 +85,62 @@ public class AVLTree<E> extends BST<E> {
 
     /**
      * 对node进行左旋转
-     * @param node
+     *
+     * @param grand
      */
-    private void rotateLeft(Node<E> node) {
+    private void rotateLeft(Node<E> grand) {
+        Node<E> parent = grand.right;
+        Node<E> child = parent.left;
+        grand.right = child;
+        parent.left = grand;
 
+        afterRotate(grand, parent, child);
     }
 
     /**
      * 对node进行右旋转
-     * @param node
+     *
+     * @param grand
      */
-    private void rotateRight(Node<E> node) {
+    private void rotateRight(Node<E> grand) {
+        Node<E> parent = grand.left;
+        Node<E> child = parent.right;
+        grand.left = child;
+        parent.right = grand;
 
+        afterRotate(grand, parent, child);
+    }
+
+    /**
+     * 旋转之后, 更新它们的parent; 并且更新旋转后的高度
+     *
+     * @param grand
+     * @param parent
+     * @param child
+     */
+    private void afterRotate(Node<E> grand, Node<E> parent, Node<E> child) {
+        // 让parent为子树的根节点
+        parent.parent = grand.parent;
+        // 如果grand是其父节点的left, 则将grand.parent.left = parent;
+        if (grand.isLeftChild()) {
+            grand.parent.left = parent;
+        } else if (grand.isRightChild()) {
+            grand.parent.right = parent;
+            // grand是根节点
+        } else {
+            root = parent;
+        }
+
+        // 更新child的parent
+        if (child != null)
+            child.parent = grand;
+
+        // 更新grand的parent
+        grand.parent = parent;
+
+        // 更新高度(因为grand、parent的左右子树都变了, 先更新grand(矮的))
+        updateHeight(grand);
+        updateHeight(parent);
     }
 
     /**
@@ -164,6 +212,15 @@ public class AVLTree<E> extends BST<E> {
             if (leftHeight > rightHeight) return left;
             if (leftHeight < rightHeight) return right;
             return isLeftChild() ? left : right;
+        }
+
+        @Override
+        public String toString() {
+            String parentString = "null";
+            if (parent != null) {
+                parentString = parent.element.toString();
+            }
+            return element + "_p(" + parentString + ")_h(" + height + ")";
         }
     }
 }
