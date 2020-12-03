@@ -1,7 +1,7 @@
 package com.rbt;
 
 import com.rbt.printer.BinaryTrees;
-import com.rbt.tree.AVLTree;
+import com.rbt.tree.RBTree;
 
 /**
  * Description:
@@ -11,33 +11,35 @@ import com.rbt.tree.AVLTree;
  */
 public class Main {
     public static void main(String[] args) {
-        test();
+        test2();
     }
 
+    // 测试RBTree的添加操作 (打印最终的结果)
     public static void test() {
         Integer[] data = new Integer[]{
-                40, 35, 12, 54, 3, 29, 98, 100, 2, 76
+                55, 87, 56, 74, 96, 22, 62, 20, 70, 68, 90, 50
         };
 
-        AVLTree<Integer> avl = new AVLTree<>();
+        RBTree<Integer> rb = new RBTree<>();
         for (int i = 0; i < data.length; i++) {
-            avl.add(data[i]);
-            // System.out.println("[" + data[i] + "]");
-            // BinaryTrees.println(avl);
-            // System.out.println("-----------------------------------------------------------------------------------------------------------------------------");
+            rb.add(data[i]);
         }
 
+        BinaryTrees.println(rb);
+    }
+
+    // 测试RBTree的添加操作 (打印添加结点的过程)
+    public static void test2() {
+        Integer[] data = new Integer[]{
+                55, 87, 56, 74, 96, 22, 62, 20, 70, 68, 90, 50
+        };
+
+        RBTree<Integer> rb = new RBTree<>();
         for (int i = 0; i < data.length; i++) {
-            avl.remove(data[i]);
-             System.out.println("[" + data[i] + "]");
-             BinaryTrees.println(avl);
-             System.out.println("-----------------------------------------------------------------------------------------------------------------------------");
+            rb.add(data[i]);
+            System.out.println("[" + data[i] + "]");
+            BinaryTrees.println(rb);
+            System.out.println("-------------------------------------");
         }
-
-
-        // avl.remove(99);
-        // avl.remove(85);
-        // avl.remove(95);
-        // BinaryTrees.println(avl);
     }
 }
