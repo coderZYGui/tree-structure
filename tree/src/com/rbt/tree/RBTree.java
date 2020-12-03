@@ -21,6 +21,37 @@ public class RBTree<E> extends BST<E> {
         super(comparator);
     }
 
+    @Override
+    protected void afterAdd(Node<E> node) {
+        Node<E> parent = node.parent;
+
+        // 添加的是根节点(染成黑色)
+        if (parent == null) {
+            black(node);
+            return;
+        }
+
+        // ------------- 一共 12 种情况--------------
+        // 不需要处理的4种情况:  如果父节点是黑色, 直接返回
+        if (isBlack(parent)) return;
+
+        // 根据uncle节点的颜色来判断其他的各4种情况
+        Node<E> uncle = parent.sibling();
+        // 祖父节点
+        Node<E> grand = parent.parent;
+
+        // 需要处理的4种情况: 叔父节点是红色
+        if (isRed(uncle)) {
+            black(parent);
+            black(uncle);
+            // 把祖父节点染成红色, 当做新添加的结点处理(递归调用afterAdd)
+            afterAdd(red(grand));
+            return;
+        }
+
+        // 需要处理的4种情况: 叔父节点不是红色(叔父节点为空)
+    }
+
     /**
      * 将node染成color色
      *
