@@ -1,4 +1,4 @@
-package com.restructure.Interface;
+package com.bst.Interface;
 
 /**
  * Description: 比较器

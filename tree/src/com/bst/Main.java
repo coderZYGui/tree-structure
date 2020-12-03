@@ -1,6 +1,6 @@
-package com.restructure;
+package com.bst;
 
-import com.restructure.printer.BinaryTrees;
+import com.bst.printer.BinaryTrees;
 
 /**
  * Description:

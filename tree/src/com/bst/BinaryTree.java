@@ -1,6 +1,6 @@
-package com.restructure;
+package com.bst;
 
-import com.restructure.printer.BinaryTreeInfo;
+import com.bst.printer.BinaryTreeInfo;
 
 import java.util.LinkedList;
 import java.util.Queue;

@@ -1,6 +1,6 @@
-package com.restructure;
+package com.bst;
 
-import com.restructure.Interface.Comparator;
+import com.bst.Interface.Comparator;
 
 /**
  * Description: 重构二叉排序树

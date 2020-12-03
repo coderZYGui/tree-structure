@@ -1,7 +1,7 @@
 package com.avl.tree;
 
 import com.avl.printer.BinaryTreeInfo;
-import com.restructure.BST;
+import com.bst.BST;
 
 import java.util.LinkedList;
 import java.util.Queue;

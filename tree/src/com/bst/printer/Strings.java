@@ -1,4 +1,4 @@
-package com.restructure.printer;
+package com.bst.printer;
 
 public class Strings {
 	public static String repeat(String string, int count) {
