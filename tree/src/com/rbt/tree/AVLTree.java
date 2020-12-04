@@ -57,7 +57,7 @@ public class AVLTree<E> extends BBST<E> {
      * @param node 被删除的结点
      */
     @Override
-    protected void afterRemove(Node<E> node) {
+    protected void afterRemove(Node<E> node, Node<E> replacement) {
         while ((node = node.parent) != null) {
             // 判断node是否平衡
             if (isBalanced(node)) {

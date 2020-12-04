@@ -101,6 +101,23 @@ public class RBTree<E> extends BBST<E> {
         }*/
     }
 
+    @Override
+    protected void afterRemove(Node<E> node, Node<E> replacement) {
+        // 删除的节点, 都是叶子节点
+
+        // 如果删除的节点为红色,则不需要处理
+        if (isRed(node)) return;
+
+        // 用于取代node的节点replacement为红色
+        if (isRed(replacement)) {
+            // 将替代节点染为黑色
+            black(replacement);
+            return;
+        }
+
+        // 删除黑色的叶子节点
+    }
+
     /**
      * 将node染成color色
      *
