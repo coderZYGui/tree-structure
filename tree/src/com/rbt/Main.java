@@ -11,7 +11,27 @@ import com.rbt.tree.RBTree;
  */
 public class Main {
     public static void main(String[] args) {
-        test2();
+        test3();
+    }
+
+    public static void test3() {
+        Integer[] data = new Integer[]{
+                55, 87, 56, 74, 96, 22, 62, 20, 70, 68, 90, 50
+        };
+
+        RBTree<Integer> rb = new RBTree<>();
+        for (int i = 0; i < data.length; i++) {
+            rb.add(data[i]);
+        }
+
+        BinaryTrees.println(rb);
+
+        for (int i = 0; i < data.length; i++) {
+            rb.remove(data[i]);
+            System.out.println("-------------------------------------");
+            System.out.println("[" + data[i] + "]");
+            BinaryTrees.println(rb);
+        }
     }
 
     // 测试RBTree的添加操作 (打印最终的结果)

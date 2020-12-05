@@ -44,7 +44,7 @@ public class RBTree<E> extends BBST<E> {
         if (isRed(uncle)) {
             black(parent);
             black(uncle);
-            // 把祖父节点染成红色, 当做新添加的结点处理(递归调用afterAdd)
+            // 把祖父节点染成红色, 当做新添加的节点处理(递归调用afterAdd)
             afterAdd(red(grand));
             return;
         }
@@ -115,7 +115,77 @@ public class RBTree<E> extends BBST<E> {
             return;
         }
 
-        // 删除黑色的叶子节点
+        // 删除的是根节点
+        Node<E> parent = node.parent;
+        if (parent == null) return;
+
+        // 删除黑色的叶子节点(肯定会下溢)
+        // 判断被删除的node是左还是右(如果直接通过sibling()方法,拿到的不准确,因为在remove方法中已经将node置为null了,然后才调用的afterRemove
+        boolean left = parent.left == null || node.isLeftChild();
+        Node<E> sibling = left ? parent.right : parent.left;
+        if (left) { // 被删除的节点在左边, 兄弟节点在右边
+            if (isRed(sibling)) {
+                black(sibling);
+                red(parent);
+                rotateLeft(parent);
+                sibling = parent.right;
+            }
+            // 兄弟节点必然是黑色
+            if (isBlack(sibling.left) && isBlack(sibling.right)) {  // 表示node的黑兄弟节点的left,right子节点都是黑节点
+                boolean parentBlack = isBlack(parent);
+                black(parent);
+                red(sibling);
+                if (parentBlack) {
+                    afterRemove(parent, null);
+                }
+            } else { // 表示兄弟节点至少有一个红色子节点,可以向被删除节点的位置借一个节点
+                if (isBlack(sibling.right)) {
+                    rotateRight(sibling);
+                    sibling = parent.right;
+                }
+                color(sibling, colorOf(parent));
+                black(sibling.right);
+                black(parent);
+                rotateLeft(parent);
+            }
+        } else { // 被删除节点在右边, 兄弟节点在左边
+            if (isRed(sibling)) { // 兄弟节点是红色
+                black(sibling);
+                red(parent);
+                rotateRight(parent); // 旋转之后,改变兄弟节点,然后node的兄弟节点就为黑色了
+                // 更换兄弟节点
+                sibling = parent.left;
+            }
+
+            // 兄弟节点必然是黑色
+            if (isBlack(sibling.left) && isBlack(sibling.right)) {  // 表示node的黑兄弟节点的left,right子节点都是黑节点
+                // 兄弟节点没有一个红色子节点(不能借一个节点给你), 父节点要向下跟node的兄弟节点合并
+                /*
+                    首先这里要判断父节点parent的颜色(如果为parent为红色,则根据B树红色节点向其黑色父节点合并原则,parent向下合并,肯定不会
+                    发生下溢; 如果parent为黑色,则说明parent向下合并后,必然也会发生下溢,这里我们当作移除一个叶子结点处理,复用afterRemove
+                 */
+                boolean parentBlack = isBlack(parent);
+                // 下面两行染色的代码,是说明parent为红色的情况
+                black(parent);
+                red(sibling);
+                if (parentBlack) {
+                    afterRemove(parent, null);
+                }
+
+            } else { // 表示兄弟节点至少有一个红色子节点,可以向被删除节点的位置借一个节点
+                // 兄弟节点的左边是黑色, 先将兄弟节点左旋转; 旋转完之后和后面两种的处理方式相同,都是再对父节点进行右旋转
+                if (isBlack(sibling.left)) {
+                    rotateLeft(sibling);
+                    sibling = parent.left; // 因为旋转之后,要更改node的sibling,才能复用下面的染色代码.不然出现bug
+                }
+                // 旋转之后的中心节点继承parent的颜色; 旋转之后的左右节点染为黑色
+                // 先染色,再旋转: 肯定要先对node的sibling先染色
+                color(sibling, colorOf(parent));
+                black(sibling.left);
+                black(parent);
+                rotateRight(parent);
+            }
+        }
     }
 
     /**
