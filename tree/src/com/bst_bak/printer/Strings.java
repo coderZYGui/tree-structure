@@ -1,4 +1,4 @@
-package com.zy.printer;
+package com.bst_bak.printer;
 
 public class Strings {
 	public static String repeat(String string, int count) {
