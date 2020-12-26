@@ -11,29 +11,17 @@ import java.util.Comparator;
  * @date 2020/12/25 17:33
  */
 @SuppressWarnings("unchecked")
-public class BinaryHeap<E> implements Heap<E>, BinaryTreeInfo {
+public class BinaryHeap<E> extends AbstractHeap<E> implements BinaryTreeInfo {
     private E[] elements;
-    private int size;
-    private Comparator<E> comparator;
     private static final int DEFAULT_CAPACITY = 10;
 
     public BinaryHeap(Comparator<E> comparator) {
-        this.comparator = comparator;
+        super(comparator);
         this.elements = (E[]) new Object[DEFAULT_CAPACITY];
     }
 
     public BinaryHeap() {
         this(null);
-    }
-
-    @Override
-    public int size() {
-        return size;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return size == 0;
     }
 
     @Override
@@ -61,7 +49,17 @@ public class BinaryHeap<E> implements Heap<E>, BinaryTreeInfo {
 
     @Override
     public E remove() {
-        return null;
+        emptyCheck();
+
+        E root = elements[0];
+        // 将数组最后的节点,替代堆顶节点; 这样做的目的是为了减少移动,提高效率
+        elements[0] = elements[size - 1];
+        elements[size - 1] = null;
+        size--;
+
+        // 最后一个元素放到数组索引0的位置后, 要进行下滤, 修复二叉堆性质
+        siftDown(0);
+        return root;
     }
 
     @Override
@@ -92,21 +90,68 @@ public class BinaryHeap<E> implements Heap<E>, BinaryTreeInfo {
 //        }
 
         // 对比上面, 进行优化
-        E e = elements[index];
+        E element = elements[index];
         while (index > 0) {
-            int pindex = (index - 1) >> 1;
-            E p = elements[pindex];
-            if (compare(e, p) <= 0) break;
+            int parentIndex = (index - 1) >> 1;
+            E parent = elements[parentIndex];
+            if (compare(element, parent) <= 0) break;
             // 将父元素存储在index位置
-            elements[index] = p;
+            elements[index] = parent;
             // 重新赋值index
-            index = pindex;
+            index = parentIndex;
         }
-        elements[index] = e;
+        elements[index] = element;
     }
 
-    private int compare(E e1, E e2) {
-        return comparator != null ? comparator.compare(e1, e2) : ((Comparable<E>) e1).compareTo(e2);
+    /**
+     * 让index位置的元素进行下滤操作, 最后一个元素放到数组索引0的位置后,可能不满足二叉堆的性质,要进行下滤, 修复二叉堆性质
+     *
+     * @param index 需要进行下滤的节点, 肯定是非叶子节点,因为要和他的子节点比较, 得到堆顶元素
+     */
+    private void siftDown(int index) {
+        E element = elements[index];
+        // 非叶子节点的数量: 公式:floor (n / 2)
+        int notLeafCount = size >> 1;
+        /*
+            完全二叉树, 从上至下,从左向右,遇到的第一个叶子节点, 它后面的节点必然是叶子节点, 完全二叉树性质
+            也就是说, `当index小于第一个叶子节点的索引`, 那么index肯定不是叶子节点
+
+            第一个叶子节点的索引 = 非叶子节点的数量
+         */
+
+        // 确保index位置的元素必须要有子节点, 然后和最大的子节点进行交换位置
+        // 如果index位置的元素 大于 它的子节点, 则不需要交换, 符合二叉堆性质, 退出循环
+        /*
+            第一个叶子节点的索引 = 非叶子节点的数量
+            index < 第一个非叶子节点的数量, 就表示它肯定是有子节点的
+         */
+        while (index < notLeafCount) {
+            // 表示index索引的节点肯定是非叶子节点
+            // index节点有两种情况 (基于完全二叉树的性质)
+            // 1. 只有左子节点
+            // 2. 同时有左右子节点
+            // 默认为 左子节点 跟 交换完的堆顶节点 比较 ;左子节点的索引:公式 2i+1,右子节点的索引: 2i+2 == 左子节点索引 + 1
+            int childIndex = (index << 1) + 1;
+            E child = elements[childIndex];
+
+            // 右子节点
+            int rightIndex = childIndex + 1;
+            // 如果有左右节点, 选出最大的子节点
+            //  // 表示算出来的右子节点的索引,是存在的, rightIndex < size 且 右子节点大于左子节点
+            if (rightIndex < size && compare(elements[rightIndex], child) > 0) {
+                childIndex = rightIndex;
+                child = elements[rightIndex];
+            }
+
+            if (compare(element, child) >= 0) break; // 说明element交换过来的堆顶节点 大于它的子节点, 此时满足二叉堆性质,退出
+
+            // 将子节点存放到index位置; `然后要将childIndex赋值给index`, 也就是说此时的堆顶节点跑到了childIndex的位置,
+            // 所以要将更换堆顶节点index的值, 就需要使用 index = childIndex; 因为下一轮还是需要index的堆顶元素再和它的子节点比较, 以此类推
+            elements[index] = child;
+            // 重新设置index
+            index = childIndex;
+        }
+        elements[index] = element;
     }
 
     private void ensureCapacity(int capacity) {
