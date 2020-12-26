@@ -15,13 +15,38 @@ public class BinaryHeap<E> extends AbstractHeap<E> implements BinaryTreeInfo {
     private E[] elements;
     private static final int DEFAULT_CAPACITY = 10;
 
-    public BinaryHeap(Comparator<E> comparator) {
+    /*
+        批量建堆, 就是外界传过来一个无序的数组, 我们通过二叉堆的规则, 将该数组
+        变为一个二叉堆的结构
+     */
+    public BinaryHeap(E[] elements, Comparator<E> comparator) {
         super(comparator);
-        this.elements = (E[]) new Object[DEFAULT_CAPACITY];
+        // 外界传过来的数组为空,或者长度为0: 就无法批量建堆
+        if (elements == null || elements.length == 0) {
+            this.elements = (E[]) new Object[DEFAULT_CAPACITY];
+        } else {
+            size = elements.length;
+            // this.elements = elements; // 这样的话, 外面修改数组, 我们内部的数组也需要修改, 这样不好, 最好的方式就是深拷贝一份数据
+            int capacity = Math.max(elements.length, DEFAULT_CAPACITY);
+            this.elements = (E[]) new Object[capacity];
+            for (int i = 0; i < elements.length; i++) {
+                this.elements[i] = elements[i];
+            }
+            // 建堆
+            heapify();
+        }
+    }
+
+    public BinaryHeap(E[] elements) {
+        this(elements, null);
+    }
+
+    public BinaryHeap(Comparator<E> comparator) {
+        this(null, comparator);
     }
 
     public BinaryHeap() {
-        this(null);
+        this(null, null);
     }
 
     @Override
@@ -64,6 +89,7 @@ public class BinaryHeap<E> extends AbstractHeap<E> implements BinaryTreeInfo {
 
     /**
      * 删除堆顶元素, 并添加一个元素
+     *
      * @param element
      * @return
      */
@@ -85,6 +111,21 @@ public class BinaryHeap<E> extends AbstractHeap<E> implements BinaryTreeInfo {
             siftDown(0); // 下滤
         }
         return root;
+    }
+
+    /**
+     * 批量建堆
+     */
+    private void heapify() {
+        // 自上而下的上滤 (效率不高,因为索引为0的位置就不需要上滤了,所以i从1开始)
+        // for (int i = 1; i < size; i++) {
+        //     siftUp(i);
+        // }
+
+        // 自下而上的下滤
+        for (int i = (size >> 1) - 1; i >= 0; i--) {
+            siftDown(i);
+        }
     }
 
     /**
@@ -136,7 +177,7 @@ public class BinaryHeap<E> extends AbstractHeap<E> implements BinaryTreeInfo {
             完全二叉树, 从上至下,从左向右,遇到的第一个叶子节点, 它后面的节点必然是叶子节点, 完全二叉树性质
             也就是说, `当index小于第一个叶子节点的索引`, 那么index肯定不是叶子节点
 
-            第一个叶子节点的索引 = 非叶子节点的数量
+            第一个叶子节点的索引 = 非叶子节点的数量 = size / 2
          */
 
         // 确保index位置的元素必须要有子节点, 然后和最大的子节点进行交换位置
