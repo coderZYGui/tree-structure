@@ -23,7 +23,9 @@ public class Main {
         heap.add(65);
 
         BinaryTrees.print(heap);
-        heap.remove();
+//        heap.remove();
+//        BinaryTrees.print(heap);
+        System.out.println(heap.replace(70));
         BinaryTrees.print(heap);
     }
 }

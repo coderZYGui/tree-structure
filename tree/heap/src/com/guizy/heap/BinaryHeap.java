@@ -62,9 +62,29 @@ public class BinaryHeap<E> extends AbstractHeap<E> implements BinaryTreeInfo {
         return root;
     }
 
+    /**
+     * 删除堆顶元素, 并添加一个元素
+     * @param element
+     * @return
+     */
     @Override
     public E replace(E element) {
-        return null;
+        elementNotNullCheck(element);
+        // 方式一: 两个O(logn)级别
+//        E root = remove();
+//        add(element);
+
+        // 方式二: 可以将要添加的元素直接覆盖掉堆顶元素, 然后进行一次下滤操作即可; 这样的话就一次O(logn)
+        E root = null;
+        if (size == 0) {    // 表示数组中为空,堆中没有节点, 所以就不删除了, 但是可以添加
+            elements[0] = element;
+            size++;
+        } else { // 表示堆不为空, 将堆顶元素删除
+            root = elements[0];
+            elements[0] = element;
+            siftDown(0); // 下滤
+        }
+        return root;
     }
 
     /**
