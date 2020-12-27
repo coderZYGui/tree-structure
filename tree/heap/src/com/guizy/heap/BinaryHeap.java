@@ -32,7 +32,7 @@ public class BinaryHeap<E> extends AbstractHeap<E> implements BinaryTreeInfo {
             for (int i = 0; i < elements.length; i++) {
                 this.elements[i] = elements[i];
             }
-            // 建堆
+            // 批量建堆的方法
             heapify();
         }
     }
