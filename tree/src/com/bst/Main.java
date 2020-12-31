@@ -48,6 +48,7 @@ public class Main {
 
         sb.delete(0, sb.length());
         bst.postorderTraversal(visitor);
+        System.out.println(sb);
         Asserts.test(sb.toString().equals("2 5 4 8 11 9 7 "));
     }
     public static void test() {

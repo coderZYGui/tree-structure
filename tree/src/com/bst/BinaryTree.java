@@ -63,6 +63,7 @@ public class BinaryTree<E> implements BinaryTreeInfo {
 
     /**
      * 递归实现前序遍历
+     *
      * @param node
      * @param visitor
      */
@@ -120,10 +121,32 @@ public class BinaryTree<E> implements BinaryTreeInfo {
         // this.postorderTraversal(root, visitor); // 从根节点开始遍历
 
         // 非递归实现
+        if (visitor == null || root == null) return;
+        // 记录上一次弹出访问的节点
+        Node<E> prev = null;
+        Stack<Node<E>> stack = new Stack<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            // 偷看栈顶是哪个元素
+            Node<E> top = stack.peek();
+            if (top.isLeaf() || (prev != null && prev.parent == top)) {
+                prev = stack.pop();
+                // 访问节点
+                if (visitor.visit(prev.element)) return;
+            } else {
+                if (top.right != null) {
+                    stack.push(top.right);
+                }
+                if (top.left != null) {
+                    stack.push(top.left);
+                }
+            }
+        }
     }
 
     /**
      * 递归实现后序遍历
+     *
      * @param node
      * @param visitor
      */
@@ -173,6 +196,7 @@ public class BinaryTree<E> implements BinaryTreeInfo {
     }
 
     // 方式二: 迭代的方式
+
     /**
      * 使用层序遍历的方式, 计算树的高度
      */
