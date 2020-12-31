@@ -62,6 +62,31 @@ public class BinaryTree<E> implements BinaryTreeInfo {
     }
 
     /**
+     * 前序遍历(根左右)
+     */
+    public void preorderTraversal2(Visitor<E> visitor) {
+        // 递归实现
+        // this.preorderTraversal(root, visitor); // 从根节点开始遍历
+
+        // 非递归实现
+        if (visitor == null || root == null) return;
+        Stack<Node<E>> stack = new Stack<>(); // 用来存放右子节点
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            Node<E> node = stack.pop();
+            // 访问node节点
+            if (visitor.visit(node.element)) return;
+            if (node.right != null) {
+                stack.push(node.right);
+            }
+            if (node.left != null) {
+                stack.push(node.left);
+            }
+        }
+    }
+
+
+    /**
      * 递归实现前序遍历
      *
      * @param node

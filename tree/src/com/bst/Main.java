@@ -37,7 +37,7 @@ public class Main {
         };
         // 遍历
         sb.delete(0, sb.length());
-        bst.preorderTraversal(visitor);
+        bst.preorderTraversal2(visitor);
         System.out.println(sb);
         Asserts.test(sb.toString().equals("7 4 2 5 9 8 11 "));
 
