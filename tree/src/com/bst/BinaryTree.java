@@ -78,7 +78,27 @@ public class BinaryTree<E> implements BinaryTreeInfo {
      * 中序遍历(左根右 / 右根左), 相当于升序/降序
      */
     public void inorderTraversal(Visitor<E> visitor) {
-        this.inorderTraversal(root, visitor); // 从根节点开始遍历
+        // 递归实现
+        // this.inorderTraversal(root, visitor); // 从根节点开始遍历
+
+        // 非递归实现
+        if (visitor == null || root == null) return;
+        Node<E> node = root;
+        Stack<Node<E>> stack = new Stack<>();
+        while (true) {
+            if (node != null) {
+                stack.push(node);
+                node = node.left;
+            } else if (stack.isEmpty()) {
+                return;
+            } else {
+                node = stack.pop();
+                // 访问node节点
+                if (visitor.visit(node.element)) return;
+                // 让右节点进行中序遍历
+                node = node.right;
+            }
+        }
     }
 
     /**
@@ -96,7 +116,10 @@ public class BinaryTree<E> implements BinaryTreeInfo {
      * 后序遍历(左右根/右左根)
      */
     public void postorderTraversal(Visitor<E> visitor) {
-        this.postorderTraversal(root, visitor); // 从根节点开始遍历
+        // 递归实现
+        // this.postorderTraversal(root, visitor); // 从根节点开始遍历
+
+        // 非递归实现
     }
 
     /**

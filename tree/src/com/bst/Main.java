@@ -43,6 +43,7 @@ public class Main {
 
         sb.delete(0, sb.length());
         bst.inorderTraversal(visitor);
+        System.out.println(sb);
         Asserts.test(sb.toString().equals("2 4 5 7 8 9 11 "));
 
         sb.delete(0, sb.length());
