@@ -4,6 +4,7 @@ import com.bst.printer.BinaryTreeInfo;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
 /**
  * Description: 二叉树
@@ -33,11 +34,39 @@ public class BinaryTree<E> implements BinaryTreeInfo {
     /**
      * 前序遍历(根左右)
      */
-    public void preorderTraversal(BST.Visitor<E> visitor) {
-        this.preorderTraversal(root, visitor); // 从根节点开始遍历
+    public void preorderTraversal(Visitor<E> visitor) {
+        // 递归实现
+        // this.preorderTraversal(root, visitor); // 从根节点开始遍历
+
+        // 非递归实现
+        if (visitor == null || root == null) return;
+        Node<E> node = root;
+        Stack<Node<E>> stack = new Stack<>(); // 用来存放右子节点
+        while (true) {
+            if (node != null) {
+                // 拼接node节点
+                if (visitor.visit(node.element)) return;
+                // 将右子节点入栈
+                if (node.right != null) {
+                    stack.push(node.right);
+                }
+                // 一直向左找
+                node = node.left;
+            } else if (stack.isEmpty()) {
+                // 表示遍历完了, 或者二叉树没有右子节点
+                return;
+            } else {
+                node = stack.pop();
+            }
+        }
     }
 
-    private void preorderTraversal(Node<E> node, BST.Visitor<E> visitor) {
+    /**
+     * 递归实现前序遍历
+     * @param node
+     * @param visitor
+     */
+    private void preorderTraversal(Node<E> node, Visitor<E> visitor) {
         if (node == null || visitor == null) return;
 
         visitor.visit(node.element);
@@ -48,11 +77,14 @@ public class BinaryTree<E> implements BinaryTreeInfo {
     /**
      * 中序遍历(左根右 / 右根左), 相当于升序/降序
      */
-    public void inorderTraversal(BST.Visitor<E> visitor) {
+    public void inorderTraversal(Visitor<E> visitor) {
         this.inorderTraversal(root, visitor); // 从根节点开始遍历
     }
 
-    private void inorderTraversal(Node<E> node, BST.Visitor<E> visitor) {
+    /**
+     * 递归实现中序遍历
+     */
+    private void inorderTraversal(Node<E> node, Visitor<E> visitor) {
         if (node == null || visitor == null) return;
 
         inorderTraversal(node.left, visitor);
@@ -63,11 +95,16 @@ public class BinaryTree<E> implements BinaryTreeInfo {
     /**
      * 后序遍历(左右根/右左根)
      */
-    public void postorderTraversal(BST.Visitor<E> visitor) {
+    public void postorderTraversal(Visitor<E> visitor) {
         this.postorderTraversal(root, visitor); // 从根节点开始遍历
     }
 
-    private void postorderTraversal(Node<E> node, BST.Visitor<E> visitor) {
+    /**
+     * 递归实现后序遍历
+     * @param node
+     * @param visitor
+     */
+    private void postorderTraversal(Node<E> node, Visitor<E> visitor) {
         if (node == null || visitor == null) return;
 
         postorderTraversal(node.left, visitor);
@@ -76,7 +113,7 @@ public class BinaryTree<E> implements BinaryTreeInfo {
     }
 
     // 层序遍历
-    public void levelOrder(BST.Visitor<E> visitor) {
+    public void levelOrder(Visitor<E> visitor) {
         if (root == null || visitor == null) return;
 
         Queue<Node<E>> queue = new LinkedList<>();
@@ -97,7 +134,7 @@ public class BinaryTree<E> implements BinaryTreeInfo {
     }
 
     public interface Visitor<E> {
-        void visit(E element);
+        boolean visit(E element);
     }
 
     // 计算二叉树排序树的高度
